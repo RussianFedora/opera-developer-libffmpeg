@@ -17,7 +17,7 @@
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
 Version:	%{opera_major_ver}.0.1963.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Epoch:		5
 
 Group:		Applications/Internet
@@ -188,6 +188,9 @@ patch -p1 < %{SOURCE1}
 xz -d %{SOURCE2}
 xz -d %{SOURCE3}
 
+# Workaround for "No such file or directory" build error:
+touch ./chrome/test/data/webui/i18n_process_css_test.html
+
 %build
 buildconfig+="-Dwerror=
                 -Dcomponent=shared_library
@@ -289,6 +292,9 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so.*
 
 %changelog
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-3.R
+- Add workaround for "No such file or directory" build error (affects Chromium >= 46)
+
 * Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-2.R
 - Rework patch
 
