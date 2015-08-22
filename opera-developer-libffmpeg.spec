@@ -4,8 +4,8 @@
 
 %define chromium_system_libs 0
 
-%define chromium_ver 45.0.2450.0
-%define opera_major_ver 32
+%define chromium_ver 46.0.2471.2
+%define opera_major_ver 33
 %define opera_chan opera-developer
 
 %if 0%{?fedora} >= 21
@@ -14,10 +14,10 @@
 %define clang 0
 %endif
 
-Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP3 support
+Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	%{opera_major_ver}.0.1933.0
-Release:	2%{?dist}
+Version:	%{opera_major_ver}.0.1963.0
+Release:	1%{?dist}
 Epoch:		5
 
 Group:		Applications/Internet
@@ -170,7 +170,7 @@ legal reasons, Opera may not be distributed with H264 compatible FFmpeg library
 included into package.
 
 It's possible to build the extra version of Chromium modified FFmpeg providing
-H264 and MP3 support. Opera-libffmpeg package includes this library.
+H264 and MP4 support. Opera-libffmpeg package includes this library.
 
 %prep
 %setup -q -c
@@ -287,16 +287,19 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so.*
 
 %changelog
-* Fri Aug 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 32.0.1933.0-2.R
+* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-1.R
+- Update to 33.0.1963.0
+
+* Fri Aug 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:32.0.1933.0-2.R
 - Drop empty debuginfo package (affects Fedora >= 24)
 
-* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 32.0.1933.0-1.R
+* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:32.0.1933.0-1.R
 - Rename to opera-developer-libffmpeg according to new channel
 - Update to 32.0.1933.0
 
-* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 31.0.1889.174-1.R
+* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:31.0.1889.174-1.R
 - Update to 31.0.1889.174
 - Add check_chromium_version.sh
 
-* Wed Aug 12 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 31.0.1889.99-1.R
+* Wed Aug 12 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:31.0.1889.99-1.R
 - Initial build
