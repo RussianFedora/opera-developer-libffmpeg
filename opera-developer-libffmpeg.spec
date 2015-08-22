@@ -17,7 +17,7 @@
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
 Version:	%{opera_major_ver}.0.1963.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Epoch:		5
 
 Group:		Applications/Internet
@@ -25,11 +25,12 @@ License:	BSD, LGPL
 URL:		https://gist.github.com/lukaszzek/ec04d5c953226c062dac
 
 Source0:	https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%{chromium_ver}.tar.xz
-Source1:	depot_tools.tar.xz
-Source2:	gn-binaries.tar.xz
-Source3:	check_chromium_version.sh
+Source1:	https://gist.githubusercontent.com/lukaszzek/ec04d5c953226c062dac/raw/1a2720d602b8399967251137f876faf7d70cc0f3/patch_ffmpeg_gyp.patch
+Source2:	depot_tools.tar.xz
+Source3:	gn-binaries.tar.xz
+Source4:	check_chromium_version.sh
 
-Patch0:		00-ffmpeg_gyp.patch
+#Patch0:	00-ffmpeg_gyp.patch
 
 %ifarch x86_64
 Provides:   libffmpeg.so.%{opera_major_ver}()(64bit)
@@ -175,17 +176,18 @@ H264 and MP4 support. Opera-libffmpeg package includes this library.
 %prep
 %setup -q -c
 
-# Create symlink for compatibility with %patch0
-pushd %{_builddir}/%{name}-%{version}
-ln -s chromium-%{chromium_ver} chromium
-popd
+## Create symlink for compatibility with %patch0
+#pushd %{_builddir}/%{name}-%{version}
+#ln -s chromium-%{chromium_ver} chromium
+#popd
 
-%patch0 -p1
+#%patch0 -p1
 
 cd %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}
-    xz -d %{SOURCE1}
-    xz -d %{SOURCE2}
-    
+patch -p1 < %{SOURCE1}
+xz -d %{SOURCE2}
+xz -d %{SOURCE3}
+
 %build
 buildconfig+="-Dwerror=
                 -Dcomponent=shared_library
@@ -287,6 +289,9 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so.*
 
 %changelog
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-2.R
+- Rework patch
+
 * Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-1.R
 - Update to 33.0.1963.0
 
