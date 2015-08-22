@@ -287,7 +287,7 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so.*
 
 %changelog
-* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-1.R
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-1.R
 - Update to 33.0.1963.0
 
 * Fri Aug 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:32.0.1933.0-2.R
