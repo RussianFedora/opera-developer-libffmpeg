@@ -4,7 +4,7 @@
 
 %define chromium_system_libs 0
 
-%define chromium_ver 46.0.2471.2
+%define chromium_ver 46.0.2486.0
 %define opera_major_ver 33
 %define opera_chan opera-developer
 
@@ -16,7 +16,7 @@
 
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	%{opera_major_ver}.0.1967.0
+Version:	%{opera_major_ver}.0.1982.0
 Release:	1%{?dist}
 Epoch:		5
 
@@ -292,28 +292,31 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so.*
 
 %changelog
-* Mon Aug 31 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1967.0-1.R
+* Thu Sep 10 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:33.0.1982.0-1
+- Update to 33.0.1982.0
+
+* Mon Aug 31 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:33.0.1967.0-1.R
 - Update to 33.0.1967.0
 
-* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-3.R
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:33.0.1963.0-3.R
 - Add workaround for "No such file or directory" build error (affects Chromium >= 46)
 
-* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-2.R
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:33.0.1963.0-2.R
 - Rework patch
 
-* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:33.0.1963.0-1.R
+* Sat Aug 22 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:33.0.1963.0-1.R
 - Update to 33.0.1963.0
 
-* Fri Aug 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:32.0.1933.0-2.R
+* Fri Aug 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:32.0.1933.0-2.R
 - Drop empty debuginfo package (affects Fedora >= 24)
 
-* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:32.0.1933.0-1.R
+* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:32.0.1933.0-1.R
 - Rename to opera-developer-libffmpeg according to new channel
 - Update to 32.0.1933.0
 
-* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:31.0.1889.174-1.R
+* Thu Aug 20 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:31.0.1889.174-1.R
 - Update to 31.0.1889.174
 - Add check_chromium_version.sh
 
-* Wed Aug 12 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> 5:31.0.1889.99-1.R
+* Wed Aug 12 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:31.0.1889.99-1.R
 - Initial build
