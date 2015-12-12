@@ -1,5 +1,4 @@
-9def3811d9193f3ec741023530d02eb0  chromium-48.0.2564.10.tar.xz
-733076d203d457a2aa236445a0224860  patch_ffmpeg_gyp.patch
+d77dda7cf512a6101cbb827e50ea4d41  chromium-48.0.2564.22.tar.xz
 bf0af213eeb9f33c2b36ec0ab944f1ca  depot_tools.tar.xz
 ca6cdd31217945be60426bab8554e50b  gn-binaries.tar.xz
 683adc06998366259b6646cddc570503  check_chromium_version.sh
