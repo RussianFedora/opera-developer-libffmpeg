@@ -4,7 +4,7 @@
 
 %define chromium_system_libs 0
 
-%define chromium_ver 48.0.2564.22
+%define chromium_ver 49.0.2593.0
 %define opera_chan opera-developer
 
 %if 0%{?fedora} >= 21
@@ -15,7 +15,7 @@
 
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	36.0.2079.0
+Version:	36.0.2106.0
 Release:	1%{?dist}
 Epoch:		5
 
@@ -280,6 +280,9 @@ install -m 644 %{_builddir}/%{name}-%{version}/chromium-%{chromium_ver}/out/Rele
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Wed Jan 13 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:36.0.2106.0-1
+- Update to 36.0.2106.0
+
 * Mon Dec 21 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:36.0.2079.0-1
 - Update to 36.0.2079.0
 
