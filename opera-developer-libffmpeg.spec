@@ -31,6 +31,8 @@ Source1:	gn-binaries.tar.xz
 Source2:	depot_tools.tar.xz
 Source3:	check_chromium_version.sh
 
+Nosource:	0
+
 BuildRequires:  SDL-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  bison
@@ -333,6 +335,9 @@ install -m 644 %{_builddir}/chromium-%{chromium_ver}/out/Release/lib/libffmpeg.s
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Sat Jan 16 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
+- Add Nosource: 0
+
 * Thu Jan 14 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:36.0.2106.0-2
 - Fix i386 build
 - Clean up *.spec file
