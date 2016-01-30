@@ -8,7 +8,7 @@
 
 %define chromium_system_libs 1
 %define opera_chan opera-developer
-%define chromium_ver 49.0.2593.0
+%define opera_ver 36.0.2120.0
 
 %if 0%{?fedora} >= 22
 %define clang 1
@@ -18,20 +18,18 @@
 
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	36.0.2106.0
-Release:	2%{?dist}
+Version:	49.0.2612.0
+Release:	1%{?dist}
 Epoch:		5
 
 Group:		Applications/Internet
 License:	BSD, LGPL
 URL:		https://gist.github.com/lukaszzek/ec04d5c953226c062dac
 
-Source0:	https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%{chromium_ver}.tar.xz
+Source0:	chromium-%{version}.clipped.tar.xz
 Source1:	gn-binaries.tar.xz
 Source2:	depot_tools.tar.xz
 Source3:	check_chromium_version.sh
-
-Nosource:	0
 
 BuildRequires:  SDL-devel
 BuildRequires:  alsa-lib-devel
@@ -143,7 +141,7 @@ BuildRequires:  xvidcore-devel
 BuildRequires:	clang
 %endif
 
-Requires:	%{opera_chan} = 5:%{version}
+Requires:	%{opera_chan} >= 5:%{opera_ver}
 
 %if 0%{?build_for_x86_64}
 %if !0%{?build_for_i386}
@@ -168,7 +166,7 @@ It's possible to build the extra version of Chromium modified FFmpeg providing
 H264 and MP4 support. Opera-libffmpeg package includes this library.
 
 %prep
-%setup -n chromium-%{chromium_ver} -q -a 1 -a 2
+%setup -n chromium-%{version} -q -a 1 -a 2
 
 # files we do not want from upstream source bundles
 rm -rf breakpad/src/processor/testdata/
@@ -328,13 +326,19 @@ mkdir -p out/Release
 ninja-build -C out/Release ffmpeg
 
 %install
-mkdir -p %{buildroot}%{_libdir}/%{opera_chan}/lib_extra
-install -m 644 %{_builddir}/chromium-%{chromium_ver}/out/Release/lib/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib_extra/
+mkdir -p %{buildroot}%{_libdir}/%{opera_chan}/lib
+install -m 644 %{_builddir}/chromium-%{version}/out/Release/lib/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib/
 
 %files
-%{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
+%{_libdir}/%{opera_chan}/lib/libffmpeg.so
 
 %changelog
+* Sat Jan 30 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:49.0.2612.0-1
+- Change package numeration due to Chromium version
+- Match Opera version 36.0.2120.0
+- Remove Nosource: 0
+- Clip chromium source archive
+
 * Sat Jan 16 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
 - Add Nosource: 0
 
