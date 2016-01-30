@@ -2,7 +2,7 @@
 
 DEBUG=1
 
-CHROMIUM_VER=$(grep "%define chromium_ver" *.spec | cut --delimiter=\  --fields=3)
+CHROMIUM_VER=$(rpm -q --specfile *.spec --qf "%{version}")
 if [ "$DEBUG" = 1 ]; then
     echo "$CHROMIUM_VER"
 fi
