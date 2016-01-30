@@ -31,9 +31,6 @@ Source1:	gn-binaries.tar.xz
 Source2:	depot_tools.tar.xz
 Source3:	check_chromium_version.sh
 
-BuildRequires:	wget
-BuildRequires:	grep
-
 BuildRequires:  SDL-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  bison
@@ -337,7 +334,7 @@ install -m 644 %{_builddir}/chromium-%{version}/out/Release/lib/libffmpeg.so %{b
 
 %changelog
 * Sat Jan 30 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:49.0.2612.0-2
-- Add BuildRequires: wget, grep
+- Fix get_sources.sh
 
 * Sat Jan 30 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:49.0.2612.0-1
 - Change package numeration due to Chromium version

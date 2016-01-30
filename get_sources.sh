@@ -8,7 +8,7 @@ if [ "$DEBUG" = 1 ]; then
 fi
 
 rm -rf chromium-$CHROMIUM_VER
-wget -N -q https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$CHROMIUM_VER.tar.xz
+curl -sO https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$CHROMIUM_VER.tar.xz
 tar -xf chromium-$CHROMIUM_VER.tar.xz
 
 pushd chromium-$CHROMIUM_VER/native_client &> /dev/null || :
