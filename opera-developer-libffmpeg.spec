@@ -32,6 +32,7 @@ Source2:	depot_tools.tar.xz
 Source3:	check_chromium_version.sh
 
 BuildRequires:	wget
+BuildRequires:	grep
 
 BuildRequires:  SDL-devel
 BuildRequires:  alsa-lib-devel
