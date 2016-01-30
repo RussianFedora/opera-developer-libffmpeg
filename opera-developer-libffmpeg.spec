@@ -31,6 +31,8 @@ Source1:	gn-binaries.tar.xz
 Source2:	depot_tools.tar.xz
 Source3:	check_chromium_version.sh
 
+BuildRequires:	wget
+
 BuildRequires:  SDL-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  bison
