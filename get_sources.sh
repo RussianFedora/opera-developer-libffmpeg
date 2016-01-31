@@ -24,7 +24,7 @@ if [ "$REPACK" = 1 ]; then
     if [ "$DEBUG" = 1 ]; then
         echo "Repacking Chromium source..."
     fi
-    tar cavf chromium-$CHROMIUM_VER.clipped.tar.xz chromium-$CHROMIUM_VER &> /dev/null || :
+    tar caf chromium-$CHROMIUM_VER.clipped.tar.xz chromium-$CHROMIUM_VER
 else
     if [ "$DEBUG" = 1 ]; then
         echo "Renaming Chromium source..."
