@@ -10,6 +10,7 @@ fi
 
 rm -rf chromium-$CHROMIUM_VER
 curl -sO https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$CHROMIUM_VER.tar.xz
+echo "Unpacking Chromium source archive..."
 tar -xf chromium-$CHROMIUM_VER.tar.xz
 
 if [ -d chromium-$CHROMIUM_VER/native_client/toolchain ]; then
