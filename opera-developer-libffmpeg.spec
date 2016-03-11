@@ -5,20 +5,19 @@
 %global build_for_x86_64 1
 %global build_for_i386 1
 %global debug_package %{nil}
+%global clang 1
+
+%if 0%{?fedora} >= 24
+%global clang 0
+%endif
 
 %define chromium_system_libs 1
 %define opera_chan opera-developer
-%define opera_ver 37.0.2142.0
-
-%if 0%{?fedora} >= 22
-%define clang 1
-%else
-%define clang 0
-%endif
+%define opera_ver 37.0.2163.0
 
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	50.0.2638.0
+Version:	50.0.2645.4
 Release:	1%{?dist}
 Epoch:		5
 
@@ -61,6 +60,7 @@ BuildRequires:  libdc1394
 BuildRequires:  libdc1394-devel
 BuildRequires:  libdrm-devel
 BuildRequires:  libdrm-devel
+BuildRequires:  libffi-devel
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libgnome-keyring-devel
 BuildRequires:  libogg-devel
@@ -98,7 +98,6 @@ BuildRequires:  pkgconfig(xrender)
 BuildRequires:  pkgconfig(xscrnsaver)
 BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(xtst)
-BuildRequires:  libffi-devel
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  python
 BuildRequires:  python-devel
@@ -109,27 +108,38 @@ BuildRequires:  sqlite-devel
 BuildRequires:  texinfo
 BuildRequires:  util-linux
 BuildRequires:  valgrind-devel
+%if 0%{?fedora}
+BuildRequires:  python-jinja2
+BuildRequires:  python-markupsafe
+BuildRequires:  python-ply
+%endif
 
 %if 0%{?chromium_system_libs}
-BuildRequires:  libicu-devel >= 4.0
+BuildRequires:  fontconfig-devel
+BuildRequires:  libicu-devel >= 5.4
 BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  perl-JSON
-BuildRequires:  usbutils
-BuildRequires:  yasm
+BuildRequires:  pkgconfig(jsoncpp)
 BuildRequires:  pkgconfig(libevent)
 BuildRequires:  pkgconfig(libmtp)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libusb-1.0)
-BuildRequires:  pkgconfig(libxslt)
 BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(libxslt)
+BuildRequires:  pkgconfig(minizip)
+BuildRequires:  pkgconfig(minizip)
 BuildRequires:  pkgconfig(opus)
+BuildRequires:  pkgconfig(protobuf)
 BuildRequires:  pkgconfig(speex)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  re2-devel
+BuildRequires:  snappy-devel
+BuildRequires:  usbutils
+BuildRequires:  yasm
 %endif
 
 %if ! %{defined rhel}
-%if 0%{?fedora} < 22
 BuildRequires:  faac-devel >= 1.28
-%endif
 BuildRequires:  lame-devel
 BuildRequires:  opencore-amr-devel
 BuildRequires:  wdiff
@@ -168,6 +178,7 @@ H264 and MP4 support. Opera-libffmpeg package includes this library.
 %prep
 %setup -n chromium-%{version} -q -a 1 -a 2
 
+%if 0%{?chromium_system_libs}
 # files we do not want from upstream source bundles
 rm -rf breakpad/src/processor/testdata/
 rm -rf chrome/app/test_data/dlls/
@@ -184,6 +195,13 @@ rm -rf third_party/binutils/
 rm -rf third_party/expat/files/
 rm -rf third_party/flac/include
 rm -rf third_party/flac/src
+rm -rf third_party/icu/android
+rm -rf third_party/icu/linux
+rm -rf third_party/icu/mac
+rm -rf third_party/icu/patches
+rm -rf third_party/icu/public
+rm -rf third_party/icu/source
+rm -rf third_party/icu/windows
 rm -rf third_party/lcov
 rm -rf third_party/libevent/*/*
 rm -rf third_party/libevent/*.[ch]
@@ -204,6 +222,7 @@ rm -rf third_party/xdg-utils/tests/
 rm -rf third_party/yasm/source/
 rm -rf tools/gyp/test/
 rm -rf v8/test/
+%endif
 
 # Hard code extra version
 FILE=chrome/common/channel_info_posix.cc
@@ -238,6 +257,10 @@ buildconfig+="-Dwerror=
                 -Denable_hidpi=1
                 -Denable_touch_ui=1
                 -Duse_sysroot=0"
+
+%if ! %{defined rhel}
+buildconfig+=" -Dlibspeechd_h_prefix=speech-dispatcher/"
+%endif
 
 %if 0%{?clang}
 buildconfig+=" -Dclang=1
@@ -304,16 +327,19 @@ buildconfig+=" -Duse_pulseaudio=1
                 -Dgoogle_default_client_id=4139804441.apps.googleusercontent.com
                 -Dgoogle_default_client_secret=KDTRKEZk2jwT_7CDpcmMA--P"
 
-%if 0%{?fedora} >= 20
-buildconfig+=" -Dlibspeechd_h_prefix=speech-dispatcher/"
-%endif
-
 %if 0%{?clang}
 export CC=/usr/bin/clang
 export CXX=/usr/bin/clang++
 # Modern Clang produces a *lot* of warnings 
 export CXXFLAGS="${CXXFLAGS} -Wno-unknown-warning-option -Wno-unused-local-typedef -Wunknown-attributes -Wno-tautological-undefined-compare"
 export GYP_DEFINES="clang=1"
+%endif
+
+%if 0%{?fedora}
+# Look, I don't know. This package is spit and chewing gum. Sorry.
+rm -rf third_party/jinja2 third_party/markupsafe
+ln -s %{python_sitelib}/jinja2 third_party/jinja2
+ln -s %{python_sitearch}/markupsafe third_party/markupsafe
 %endif
 
 build/linux/unbundle/replace_gyp_files.py $buildconfig
@@ -326,13 +352,18 @@ mkdir -p out/Release
 ninja-build -C out/Release ffmpeg
 
 %install
-mkdir -p %{buildroot}%{_libdir}/%{opera_chan}/lib
-install -m 644 %{_builddir}/chromium-%{version}/out/Release/lib/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib/
+mkdir -p %{buildroot}%{_libdir}/%{opera_chan}/lib_extra
+install -m 644 %{_builddir}/chromium-%{version}/out/Release/lib/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib_extra/
 
 %files
-%{_libdir}/%{opera_chan}/lib/libffmpeg.so
+%{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Fri Mar 11 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:50.0.2645.4-1
+- Update to 50.0.2645.4
+- Match Opera version 37.0.2163.0
+- Move libffmpeg.so into */lib_extra/ instead */lib/
+
 * Wed Feb 17 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:50.0.2638.0-1
 - Update to 50.0.2638.0
 - Match Opera version 37.0.2142.0
