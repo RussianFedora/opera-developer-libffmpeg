@@ -1,5 +1,6 @@
 #!/bin/sh
 
+INCORRECT_URL=1
 DEBUG=1
 REPACK=0
 
@@ -9,9 +10,20 @@ if [ "$DEBUG" = 1 ]; then
 fi
 
 rm -rf chromium-$CHROMIUM_VER
-curl -sO https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$CHROMIUM_VER.tar.xz
+if [ "$INCORRECT_URL" = 1 ]; then
+    curl -sO https://chromium.googlesource.com/chromium/src.git/+archive/$CHROMIUM_VER.tar.gz
+else
+    curl -sO https://commondatastorage.googleapis.com/chromium-browser-official/chromium-$CHROMIUM_VER.tar.xz
+fi
+
 echo "Unpacking Chromium source archive..."
-tar -xf chromium-$CHROMIUM_VER.tar.xz
+if [ "$INCORRECT_URL" = 1 ]; then
+    mkdir -p chromium-$CHROMIUM_VER
+    tar -xf $CHROMIUM_VER.tar.gz -C chromium-$CHROMIUM_VER
+    rm $CHROMIUM_VER.tar.gz
+else
+    tar -xf chromium-$CHROMIUM_VER.tar.xz
+fi
 
 if [ -d chromium-$CHROMIUM_VER/native_client/toolchain ]; then
     if [ "$DEBUG" = 1 ]; then
@@ -19,6 +31,10 @@ if [ -d chromium-$CHROMIUM_VER/native_client/toolchain ]; then
     fi
     rm -rf toolchain
     REPACK=1
+else
+    if [ "$INCORRECT_URL" = 1 ]; then
+        REPACK=1
+    fi
 fi
 
 if [ "$REPACK" = 1 ]; then
