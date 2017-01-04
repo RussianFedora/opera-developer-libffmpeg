@@ -1,154 +1,172 @@
-%if %{defined rhel}
-%global _missing_build_ids_terminate_build 0
+# gn is the new new new buildtool. *sigh*
+%global use_gn 1
+
+# Leave this alone, please.
+%global target out/Release
+
+# %%{nil} for Stable; -beta for Beta; -dev for Devel
+# dash in -beta and -dev is intentional !
+%global chromium_channel %{nil}
+%global chromium_browser_channel chromium-browser%{chromium_channel}
+%global chromium_path %{_libdir}/chromium-browser%{chromium_channel}
+%global crd_path %{_libdir}/chrome-remote-desktop
+
+# We don't want any libs in these directories to generate Provides
+# Requires is trickier. 
+
+%global __provides_exclude_from %{chromium_path}/.*\\.so|%{chromium_path}/lib/.*\\.so
+%global privlibs libaccessibility|libaura_extra|libaura|libbase_i18n|libbase|libblink_common|libblink_core|libblink_modules|libblink_platform|libblink_web|libbluetooth|libboringssl|libbrowser_ui_views|libcaptive_portal|libcapture|libcc_blink|libcc_ipc|libcc_proto|libcc|libcc_surfaces|libchromium_sqlite3|libcloud_policy_proto_generated_compile|libcloud_policy_proto|libcommon|libcompositor|libcontent|libcrcrypto|libdbus|libdevice_battery|libdevice_core|libdevice_event_log|libdevice_gamepad|libdevice_geolocation|libdevices|libdevice_vibration|libdisplay_compositor|libdisplay|libdisplay_types|libdisplay_util|libdomain_reliability|libEGL|libevents_base|libevents_devices_x11|libevents_ipc|libevents_ozone_layout|libevents|libevents_x|libffmpeg|libfont_service_library|libgcm|libgeometry|libgesture_detection|libgfx_ipc_color|libgfx_ipc_geometry|libgfx_ipc_skia|libgfx_ipc|libgfx|libgfx_x11|libgin|libgles2_c_lib|libgles2_implementation|libgles2_utils|libGLESv2|libgl_init|libgl_wrapper|libgpu|libgtk2ui|libicui18n|libicuuc|libipc|libkeyboard|libkeyboard_with_content|libkeycodes_x11|libkeyed_service_content|libkeyed_service_core|libmedia_blink|libmedia_gpu|libmedia|libmemory_coordinator_browser|libmemory_coordinator_child|libmemory_coordinator_common|libmessage_center|libmidi|libmojo_blink_lib|libmojo_common_lib|libmojo_ime_lib|libmojo_public_system|libmojo_system_impl|libnative_theme|libnet|libnet_with_v8|libonc|libplatform|libpolicy_component|libpolicy_proto|libpower_save_blocker|libppapi_host|libppapi_proxy|libppapi_shared|libprefs|libprinting|libprotobuf_lite|libproxy_config|librange|libsandbox_services|libseccomp_bpf|libsessions|libshared_memory_support|libshell_dialogs|libskia|libsnapshot|libsql|libstartup_tracing|libstorage_browser|libstorage_common|libstub_window|libsuid_sandbox_client|libsurface|libtracing|libtranslator|libui_base_ime|libui_base|libui_base_x|libui_data_pack|libui_library|libui_touch_selection|libui_views_mus_lib|liburl_ipc|liburl_matcher|liburl|libuser_prefs|libv8|libviews|libwebdata_common|libweb_dialogs|libwebview|libwidevinecdm|libwm|libwtf|libx11_events_platform|libx11_window|libbindings|libgeolocation|libmojo_public_system_cpp|libtime_zone_monitor
+%global __requires_exclude ^(%{privlibs})\\.so
+
+#%if 0
+# Chromium's fork of ICU is now something we can't unbundle.
+# This is left here to ease the change if that ever switches.
+#BuildRequires:  libicu-devel >= 5.4
+#%global bundleicu 0
+#%else
+#%global bundleicu 1
+#%endif
+
+%global bundlere2 1
+
+# Chromium breaks on wayland, hidpi, and colors with gtk3 enabled.
+%global gtk3 0
+
+%if 0%{?rhel} == 7
+%global bundleopus 1
+%global bundleharfbuzz 1
+%else
+%global bundleharfbuzz 0
+%global bundleopus 1
 %endif
 
+### Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
+### Note: These are for Fedora use ONLY.
+### For your own distribution, please get your own set of keys.
+### http://lists.debian.org/debian-legal/2013/11/msg00006.html
+%global api_key AIzaSyDUIXvzVrt5OkVsgXhQ6NFfvWlA44by-aw
+%global default_client_id 449907151817.apps.googleusercontent.com
+%global default_client_secret miEreAep8nuvTdvLums6qyLK
+%global chromoting_client_id 449907151817-8vnlfih032ni8c4jjps9int9t86k546t.apps.googleusercontent.com 
+
+%global debug_package %{nil}
 %global build_for_x86_64 1
 %global build_for_i386 1
-%global debug_package %{nil}
-%global clang 1
-
-%if 0%{?fedora} >= 24
-%global clang 0
-%endif
-
-%define chromium_system_libs 1
 %define opera_chan opera-developer
-%define opera_ver 41.0.2329.0
+%define opera_ver 44.0.2463.0
 
-Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Name:		%{opera_chan}-libffmpeg
-Version:	54.0.2824.2
+Version:	56.0.2924.10
+%if 0%{?fedora} >= 25
+Release:	1%{?dist}.R
+%else
 Release:	1%{?dist}
+%endif
 Epoch:		5
-
+Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
 Group:		Applications/Internet
 License:	BSD, LGPL
-URL:		https://gist.github.com/lukaszzek/ec04d5c953226c062dac
+Url:		https://gist.github.com/lukaszzek/ec04d5c953226c062dac
 
-Source0:	chromium-%{version}.clipped.tar.xz
-Source1:	gn-binaries.tar.xz
-Source2:	depot_tools.tar.xz
-Source3:	check_chromium_version.sh
+Source0:	https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%{version}.tar.xz
+Source1:	depot_tools.git-master.tar.gz
 
-BuildRequires:  SDL-devel
-BuildRequires:  alsa-lib-devel
-BuildRequires:  bison
-BuildRequires:  bzip2-devel
-BuildRequires:  cups-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  dirac-devel >= 1.0.0
-BuildRequires:  elfutils-libelf-devel
-BuildRequires:  elfutils-devel
-BuildRequires:  expat-devel
-BuildRequires:  fdupes
-BuildRequires:  flac-devel
-BuildRequires:  flex
-BuildRequires:  freetype-devel
-BuildRequires:  gperf
-BuildRequires:  gsm
-BuildRequires:  gsm-devel
-BuildRequires:  gstreamer1-devel
-BuildRequires:  gstreamer1-plugins-base-devel
-BuildRequires:  gyp
-BuildRequires:  hicolor-icon-theme
-BuildRequires:  hunspell-devel
-BuildRequires:  imlib2-devel
-BuildRequires:  jack-audio-connection-kit-devel
-BuildRequires:  krb5-devel
-BuildRequires:  libcap-devel
-BuildRequires:  libdc1394
-BuildRequires:  libdc1394-devel
-BuildRequires:  libdrm-devel
-BuildRequires:  libdrm-devel
-BuildRequires:  libffi-devel
-BuildRequires:  libgcrypt-devel
-BuildRequires:  libgnome-keyring-devel
-BuildRequires:  libogg-devel
-BuildRequires:  liboil-devel >= 0.3.15
-BuildRequires:  libtheora-devel >= 1.1
-BuildRequires:  libusbx-devel
-BuildRequires:  libvdpau-devel
-BuildRequires:  libvorbis-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  ninja-build
-BuildRequires:  pam-devel
-BuildRequires:  pciutils-devel
-BuildRequires:  perl(Switch)
-BuildRequires:  pkgconfig
-BuildRequires:  pkgconfig(cairo) >= 1.6
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(gconf-2.0)
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(gtk+-2.0)
-BuildRequires:  pkgconfig(libcrypto)
-BuildRequires:  pkgconfig(libexif)
-BuildRequires:  pkgconfig(libexif)
-BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(nspr) >= 4.9.5
-BuildRequires:  pkgconfig(nss) >= 3.14
-BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(xcomposite)
-BuildRequires:  pkgconfig(xcursor)
-BuildRequires:  pkgconfig(xdamage)
-BuildRequires:  pkgconfig(xext)
-BuildRequires:  pkgconfig(xfixes)
-BuildRequires:  pkgconfig(xi)
-BuildRequires:  pkgconfig(xrandr)
-BuildRequires:  pkgconfig(xrender)
-BuildRequires:  pkgconfig(xscrnsaver)
-BuildRequires:  pkgconfig(xt)
-BuildRequires:  pkgconfig(xtst)
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  python
-BuildRequires:  python-devel
-BuildRequires:  schroedinger-devel
-BuildRequires:  slang-devel
-BuildRequires:  speech-dispatcher-devel
-BuildRequires:  sqlite-devel
-BuildRequires:  texinfo
-BuildRequires:  util-linux
-BuildRequires:  valgrind-devel
-%if 0%{?fedora}
-BuildRequires:  python-jinja2
-BuildRequires:  python-markupsafe
-BuildRequires:  python-ply
+### Chromium Fedora Patches ###
+# https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/7nlJv486bD4
+Patch0:	chromium-53.0.2785.92-last-commit-position.patch
+
+# We can assume gcc and binutils.
+BuildRequires:	gcc-c++
+BuildRequires:	alsa-lib-devel
+BuildRequires:	atk-devel
+BuildRequires:	bison
+BuildRequires:	cups-devel
+BuildRequires:	dbus-devel
+#BuildRequires:	desktop-file-utils
+BuildRequires:	expat-devel
+BuildRequires:	flex
+BuildRequires:	fontconfig-devel
+BuildRequires:	GConf2-devel
+BuildRequires:	glib2-devel
+BuildRequires:	gnome-keyring-devel
+BuildRequires:	gtk2-devel
+BuildRequires:	glibc-devel
+BuildRequires:	gperf
+BuildRequires:	libatomic
+BuildRequires:	libcap-devel
+BuildRequires:	libdrm-devel
+BuildRequires:	libgcrypt-devel
+#BuildRequires:	libudev-devel
+BuildRequires:	libXdamage-devel
+BuildRequires:	libXScrnSaver-devel
+BuildRequires:	libXtst-devel
+BuildRequires:	nss-devel
+#BuildRequires:	pciutils-devel
+BuildRequires:	pulseaudio-libs-devel
+
+# for /usr/bin/appstream-util
+# BuildRequires: libappstream-glib
+
+# Fedora tries to use system libs whenever it can.
+BuildRequires:	bzip2-devel
+BuildRequires:	dbus-glib-devel
+BuildRequires:	elfutils-libelf-devel
+BuildRequires:	flac-devel
+#BuildRequires:	hwdata
+#BuildRequires:	kernel-headers
+#BuildRequires:	libevent-devel
+BuildRequires:	libffi-devel
+#%if 0%{?bundleicu}
+# If this is true, we're using the bundled icu.
+# We'd like to use the system icu every time, but we cannot always do that.
+#%else
+# Not newer than 54 (at least not right now)
+#BuildRequires:	libicu-devel
+#= 54.1
+#%endif
+#BuildRequires:	libjpeg-devel
+#BuildRequires:	libpng-devel
+#BuildRequires:	libudev-devel
+# We don't use libvpx anymore because Chromium loves to
+# use bleeding edge revisions here that break other things
+# ... so we just use the bundled libvpx.
+# Same is true for libwebp.
+#BuildRequires:	libxslt-devel
+# Same here, it seems.
+#BuildRequires:	libyuv-devel
+%if %{bundleopus}
+# Do nothing
+%else
+BuildRequires:	opus-devel
 %endif
-
-%if 0%{?chromium_system_libs}
-BuildRequires:  fontconfig-devel
-BuildRequires:  libicu-devel >= 5.4
-BuildRequires:  libjpeg-turbo-devel
-BuildRequires:  perl-JSON
-BuildRequires:  pkgconfig(jsoncpp)
-BuildRequires:  pkgconfig(libevent)
-BuildRequires:  pkgconfig(libmtp)
-BuildRequires:  pkgconfig(libpng)
-BuildRequires:  pkgconfig(libusb-1.0)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(libxslt)
-BuildRequires:  pkgconfig(minizip)
-BuildRequires:  pkgconfig(minizip)
-BuildRequires:  pkgconfig(opus)
-BuildRequires:  pkgconfig(protobuf)
-BuildRequires:  pkgconfig(speex)
-BuildRequires:  pkgconfig(zlib)
-BuildRequires:  re2-devel
-BuildRequires:  snappy-devel
-BuildRequires:  usbutils
-BuildRequires:  yasm
+BuildRequires:	perl(Switch)
+#%if 0%{gtk3}
+BuildRequires:	pkgconfig(gtk+-3.0)
+#%endif
+BuildRequires:	pulseaudio-libs-devel
+BuildRequires:	python-beautifulsoup4
+BuildRequires:	python-BeautifulSoup
+BuildRequires:	python-html5lib
+%if 0%{?rhel} == 7
+BuildRequires:	python-jinja2-28
+%else
+BuildRequires:	python-jinja2
 %endif
-
-%if ! %{defined rhel}
-BuildRequires:  lame-devel
-BuildRequires:  opencore-amr-devel
-BuildRequires:  wdiff
-BuildRequires:  x264-devel
-BuildRequires:  xvidcore-devel
+BuildRequires:	python-markupsafe
+BuildRequires:	python-ply
+BuildRequires:	python-simplejson
+%if 0%{?bundlere2}
+# Using bundled bits, do nothing.
+%else
+Requires:	re2 >= 20160401
+BuildRequires:	re2-devel >= 20160401
 %endif
-
-%if 0%{?clang}
-BuildRequires:	clang
-%endif
+#BuildRequires:	speech-dispatcher-devel
+BuildRequires:	yasm
+BuildRequires:	pkgconfig(gnome-keyring-1)
+# remote desktop needs this
+#BuildRequires:	pam-devel
+#BuildRequires:	systemd
 
 Requires:	%{opera_chan} >= 5:%{opera_ver}
 
@@ -175,189 +193,312 @@ It's possible to build the extra version of Chromium modified FFmpeg providing
 H264 and MP4 support. Opera-libffmpeg package includes this library.
 
 %prep
-%setup -n chromium-%{version} -q -a 1 -a 2
+%setup -q -T -c -n depot_tools -a 1
+%setup -q -n chromium-%{version}
 
-%if 0%{?chromium_system_libs}
-# files we do not want from upstream source bundles
-rm -rf breakpad/src/processor/testdata/
-rm -rf chrome/app/test_data/dlls/
-rm -rf chrome/common/extensions/docs/
-#rm -rf chrome/test/data/
-rm -rf chrome/tools/test/reference_build/chrome_linux/
-rm -rf components/test/data/component_updater/jebgalgnebhfojomionfpkfelancnnkf/component1.dll
-rm -rf content/test/data/
-rm -rf net/data/
-rm -rf ppapi/examples/
-rm -rf ppapi/native_client/tests/
-rm -rf third_party/apache-win32/
-rm -rf third_party/binutils/
-rm -rf third_party/expat/files/
-rm -rf third_party/flac/include
-rm -rf third_party/flac/src
-rm -rf third_party/icu/android
-rm -rf third_party/icu/linux
-rm -rf third_party/icu/mac
-rm -rf third_party/icu/patches
-rm -rf third_party/icu/public
-rm -rf third_party/icu/source
-rm -rf third_party/icu/windows
-rm -rf third_party/lcov
-rm -rf third_party/libevent/*/*
-rm -rf third_party/libevent/*.[ch]
-rm -rf libexif/sources
-rm -rf libjpeg/*.[ch]
-rm -rf libjpeg_turbo
-rm -rf libpng/*.[ch]
-rm -rf libxslt/libexslt
-rm -rf libxslt/libxslt
-rm -rf libxslt/linux
-rm -rf libxslt/mac
-rm -rf libxslt/win32
-rm -rf mesa/src/src
-rm -rf swig
-rm -rf third_party/WebKit/LayoutTests/
-rm -rf third_party/WebKit/Tools/Scripts/
-rm -rf third_party/xdg-utils/tests/
-rm -rf third_party/yasm/source/
-rm -rf tools/gyp/test/
-rm -rf v8/test/
+### Chromium Fedora Patches ###
+%patch0 -p1 -b .lastcommit
+
+export CC="gcc"
+export CXX="g++"
+export AR="ar"
+export RANLIB="ranlib"
+
+CHROMIUM_BROWSER_GN_DEFINES=""
+CHROMIUM_BROWSER_GN_DEFINES+=' is_debug=false'
+%ifarch x86_64
+CHROMIUM_BROWSER_GN_DEFINES+=' system_libdir="lib64"'
 %endif
+CHROMIUM_BROWSER_GN_DEFINES+=' google_api_key="%{api_key}" google_default_client_id="%{default_client_id}" google_default_client_secret="%{default_client_secret}"'
+CHROMIUM_BROWSER_GN_DEFINES+=' is_clang=false use_sysroot=false use_gio=true use_pulseaudio=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' is_component_ffmpeg=true is_component_build=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' use_gold=false'
+CHROMIUM_BROWSER_GN_DEFINES+=' treat_warnings_as_errors=false'
+export CHROMIUM_BROWSER_GN_DEFINES
 
-# Hard code extra version
-FILE=chrome/common/channel_info_posix.cc
-sed -i.orig -e 's/getenv("CHROME_VERSION_EXTRA")/"Russian Fedora"/' $FILE
-cmp $FILE $FILE.orig && exit 1
+export CHROMIUM_BROWSER_GYP_DEFINES="\
+%ifarch x86_64
+	-Dtarget_arch=x64 \
+	-Dsystem_libdir=lib64 \
+%endif
+	-Dgoogle_api_key="%{api_key}" \
+	-Dgoogle_default_client_id="%{default_client_id}" \
+	-Dgoogle_default_client_secret="%{default_client_secret}" \
+	-Ddisable_glibc=1 \
+	-Dlinux_fpic=1 \
+	-Ddisable_sse2=1 \
+	-Duse_pulseaudio=1 \
+	-Duse_system_flac=1 \
+%if 0%{?bundleharfbuzz}
+	-Duse_system_harfbuzz=0 \
+%else
+	-Duse_system_harfbuzz=1 \
+%endif
+#	-Duse_system_libevent=0 \
+#	-Duse_system_libjpeg=1 \
+#	-Duse_system_libpng=1 \
+#	-Duse_system_libxml=0 \
+#	-Duse_system_libxslt=1 \
+%if %{bundleopus}
+	-Duse_system_opus=0 \
+%else
+	-Duse_system_opus=1 \
+%endif
+	-Duse_system_protobuf=0 \
+%if 0%{?bundlere2}
+%else
+	-Duse_system_re2=1 \
+%endif
+	-Duse_system_libsrtp=0 \
+#	-Duse_system_xdg_utils=1 \
+	-Duse_system_yasm=1 \
+	-Duse_system_zlib=0 \
+	\
+#	-Dlinux_link_libspeechd=1 \
+#	-Dlinux_link_gnome_keyring=1 \
+#	-Dlinux_link_gsettings=1 \
+#	-Dlinux_link_libpci=1 \
+#	-Dlinux_link_libgps=0 \
+	-Dlinux_sandbox_path=%{chromium_path}/chrome-sandbox \
+	-Dlinux_sandbox_chrome_path=%{chromium_path}/chromium-browser \
+	-Dlinux_strip_binary=1 \
+	-Dlinux_use_bundled_binutils=0 \
+	-Dlinux_use_bundled_gold=0 \
+	-Dlinux_use_gold_binary=0 \
+	-Dlinux_use_gold_flags=0 \
+#	-Dlinux_use_libgps=0 \
+#	\
+#	-Dusb_ids_path=/usr/share/hwdata/usb.ids \
+#%if 0%{?fedora}
+#	-Dlibspeechd_h_prefix=speech-dispatcher/ \
+#%endif
+#	\
+    -Dffmpeg_branding=ChromeOS \
+    -Dproprietary_codecs=1 \
+	-Dbuild_ffmpegsumo=1 \
+	-Dffmpeg_component=shared_library \
+#	\
+#	-Dno_strict_aliasing=1 \
+#	-Dv8_no_strict_aliasing=1 \
+#	\
+	-Dremove_webcore_debug_symbols=1 \
+#	-Dlogging_like_official_build=1 \
+#	-Denable_hotwording=0 \
+#	-Duse_aura=1 \
+#	-Denable_hidpi=1 \
+#	-Denable_touch_ui=1 \
+#	-Denable_pepper_cdms=1 \
+#	-Denable_webrtc=1 \
+#	-Denable_widevine=1 \
+%if 0%{gtk3}
+	-Duse_gtk3=1 \
+%else
+	-Dtoolkit_uses_gtk=0 \
+%endif
+%if 0
+	-Dbuildtype=Official \
+%endif
+	\
+	-Dcomponent=shared_library \
+	-Duse_sysroot=0 \
+	-Drelease_extra_cflags="-fno-delete-null-pointer-checks" \
+	-Dwerror= -Dsysroot="
+
+# Remove most of the bundled libraries. Libraries specified below (taken from
+# Gentoo's Chromium ebuild) are the libraries that needs to be preserved.
+build/linux/unbundle/remove_bundled_libraries.py \
+	'third_party/ffmpeg' \
+	'third_party/adobe' \
+	'third_party/flac' \
+	'third_party/harfbuzz-ng' \
+	'third_party/icu' \
+	'base/third_party/libevent' \
+	'third_party/libjpeg_turbo' \
+	'third_party/libpng' \
+	'third_party/libsrtp' \
+	'third_party/libwebp' \
+	'third_party/libxml' \
+	'third_party/libxslt' \
+	'third_party/openh264' \
+%if 0%{?bundlere2}
+	'third_party/re2' \
+%endif
+	'third_party/snappy' \
+	'third_party/speech-dispatcher' \
+	'third_party/usb_ids' \
+	'third_party/woff2' \
+	'third_party/xdg-utils' \
+	'third_party/yasm' \
+	'third_party/zlib' \
+	'base/third_party/dmg_fp' \
+	'base/third_party/dynamic_annotations' \
+	'base/third_party/icu' \
+	'base/third_party/nspr' \
+	'base/third_party/superfasthash' \
+	'base/third_party/symbolize' \
+	'base/third_party/valgrind' \
+	'base/third_party/xdg_mime' \
+	'base/third_party/xdg_user_dirs' \
+	'breakpad/src/third_party/curl' \
+	'chrome/third_party/mozilla_security_manager' \
+	'courgette/third_party' \
+	'native_client_sdk/src/libraries/third_party/newlib-extras' \
+	'native_client/src/third_party/dlmalloc' \
+	'native_client/src/third_party/valgrind' \
+	'net/third_party/mozilla_security_manager' \
+	'net/third_party/nss' \
+	'third_party/WebKit' \
+	'third_party/analytics' \
+	'third_party/angle' \
+	'third_party/angle/src/common/third_party/numerics' \
+	'third_party/angle/src/third_party/compiler' \
+	'third_party/angle/src/third_party/libXNVCtrl' \
+	'third_party/angle/src/third_party/murmurhash' \
+	'third_party/angle/src/third_party/trace_event' \
+	'third_party/blanketjs' \
+	'third_party/boringssl' \
+	'third_party/brotli' \
+	'third_party/cacheinvalidation' \
+	'third_party/catapult' \
+	'third_party/catapult/tracing/third_party/d3' \
+	'third_party/catapult/tracing/third_party/gl-matrix' \
+	'third_party/catapult/tracing/third_party/jszip' \
+	'third_party/catapult/tracing/third_party/mannwhitneyu' \
+        'third_party/catapult/third_party/polymer' \
+	'third_party/catapult/third_party/py_vulcanize' \
+	'third_party/catapult/third_party/py_vulcanize/third_party/rcssmin' \
+	'third_party/catapult/third_party/py_vulcanize/third_party/rjsmin' \
+        'third_party/ced' \
+	'third_party/cld_2' \
+	'third_party/cros_system_api' \
+	'third_party/devscripts' \
+	'third_party/dom_distiller_js' \
+	'third_party/expat' \
+	'third_party/fips181' \
+        'third_party/flatbuffers' \
+	'third_party/flot' \
+	'third_party/google_input_tools' \
+	'third_party/google_input_tools/third_party/closure_library' \
+	'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
+	'third_party/hunspell' \
+	'third_party/iccjpeg' \
+	'third_party/jstemplate' \
+	'third_party/khronos' \
+	'third_party/leveldatabase' \
+	'third_party/libXNVCtrl' \
+	'third_party/libaddressinput' \
+	'third_party/libjingle' \
+	'third_party/libphonenumber' \
+	'third_party/libsecret' \
+	'third_party/libudev' \
+	'third_party/libvpx' \
+	'third_party/libvpx/source/libvpx/third_party/x86inc' \
+	'third_party/libxml/chromium' \
+	'third_party/libwebm' \
+	'third_party/libyuv' \
+	'third_party/lss' \
+	'third_party/lzma_sdk' \
+	'third_party/mesa' \
+	'third_party/modp_b64' \
+	'third_party/mt19937ar' \
+	'third_party/openmax_dl' \
+	'third_party/opus' \
+	'third_party/ots' \
+	'third_party/pdfium' \
+	'third_party/pdfium/third_party/agg23' \
+	'third_party/pdfium/third_party/base' \
+	'third_party/pdfium/third_party/bigint' \
+	'third_party/pdfium/third_party/freetype' \
+	'third_party/pdfium/third_party/lcms2-2.6' \
+	'third_party/pdfium/third_party/libjpeg' \
+	'third_party/pdfium/third_party/libopenjpeg20' \
+	'third_party/pdfium/third_party/zlib_v128' \
+	'third_party/polymer' \
+	'third_party/protobuf' \
+	'third_party/protobuf/third_party/six' \
+	'third_party/ply' \
+	'third_party/qcms' \
+	'third_party/qunit' \
+	'third_party/sfntly' \
+	'third_party/sinonjs' \
+	'third_party/skia' \
+	'third_party/smhasher' \
+	'third_party/sqlite' \
+	'third_party/tcmalloc' \
+	'third_party/usrsctp' \
+	'third_party/web-animations-js' \
+	'third_party/webdriver' \
+	'third_party/webrtc' \
+	'third_party/widevine' \
+	'third_party/x86inc' \
+	'third_party/zlib/google' \
+	'url/third_party/mozilla' \
+	'v8/src/third_party/valgrind' \
+	--do-remove
+
+# Look, I don't know. This package is spit and chewing gum. Sorry.
+rm -rf third_party/jinja2
+ln -s %{python_sitelib}/jinja2 third_party/jinja2
+rm -rf third_party/markupsafe
+ln -s %{python_sitearch}/markupsafe third_party/markupsafe
+# We should look on removing other python packages as well i.e. ply
+
+export PATH=$PATH:%{_builddir}/depot_tools
+
+%if %{use_gn}
+build/linux/unbundle/replace_gn_files.py --system-libraries \
+	flac \
+%if 0%{?bundleharfbuzz}
+%else
+	harfbuzz-ng \
+%endif
+%if %{bundleopus}
+%else
+	opus \
+%endif
+%if 0%{?bundlere2}
+%else
+	re2 \
+%endif
+	yasm
+
+tools/gn/bootstrap/bootstrap.py -v --gn-gen-args "$CHROMIUM_BROWSER_GN_DEFINES"
+%{target}/gn gen --args="$CHROMIUM_BROWSER_GN_DEFINES" %{target}
+%else
+# Update gyp files according to our configuration
+# If you will change something in the configuration please update it
+# for build/gyp_chromium as well (and vice versa).
+build/linux/unbundle/replace_gyp_files.py $CHROMIUM_BROWSER_GYP_DEFINES
+
+build/gyp_chromium --depth . $CHROMIUM_BROWSER_GYP_DEFINES
+%endif
 
 %build
-# https://groups.google.com/a/chromium.org/forum/#!topic/chromium-packagers/9JX1N2nf4PU
-touch chrome/test/data/webui/i18n_process_css_test.html
-touch chrome/test/data/webui_test_resources.grd
 
-buildconfig+="-Dwerror=
-		-Dlinux_sandbox_chrome_path=%{_libdir}/chromium/chrome
-                -Duse_system_ffmpeg=0
-                -Dbuild_ffmpegsumo=1
-                -Dproprietary_codecs=1
-                -Dremove_webcore_debug_symbols=1
-                -Dlogging_like_official_build=1
-                -Dlinux_fpic=1
-                -Ddisable_sse2=1
-                -Dcomponent=shared_library
-                -Dtoolkit_uses_gtk=0
-                -Dffmpeg_branding=Chrome
-                -Ddisable_nacl=1
-                -Ddisable_glibc=0
-                -Ddisable_pnacl=1
-                -Ddisable_newlib_untar=0
-                -Duse_system_xdg_utils=1
-                -Denable_hotwording=0
-                -Denable_widevine=1
-                -Duse_aura=1
-                -Denable_hidpi=1
-                -Denable_touch_ui=1
-                -Duse_sysroot=0"
-
-%if ! %{defined rhel}
-buildconfig+=" -Dlibspeechd_h_prefix=speech-dispatcher/"
-%endif
-
-%if 0%{?clang}
-buildconfig+=" -Dclang=1
-		-Dclang_use_chrome_plugins=0"
-%else
-buildconfig+=" -Dclang=0"
-%endif
-
-%if 0%{?chromium_system_libs}
-buildconfig+=" -Duse_system_icu=0
-		-Duse_system_flac=1
-                -Duse_system_speex=1
-                -Duse_system_expat=1
-                -Duse_system_libexif=1
-                -Duse_system_libevent=1
-                -Duse_system_libmtp=1
-                -Duse_system_opus=1
-                -Duse_system_bzip2=1
-                -Duse_system_harfbuzz=1
-                -Duse_system_libjpeg=1
-                -Duse_system_libpng=1
-                -Duse_system_libxslt=1
-                -Duse_system_libxml=1
-                -Duse_system_libyuv=1
-                -Duse_system_nspr=1
-                -Duse_system_protobuf=0
-                -Duse_system_yasm=1"
-%else
-buildconfig+=" -Duse_system_icu=0
-                -Duse_system_flac=0
-                -Duse_system_speex=0
-                -Duse_system_expat=0
-                -Duse_system_libexif=0
-                -Duse_system_libevent=0
-                -Duse_system_libmtp=0
-                -Duse_system_opus=0
-                -Duse_system_bzip2=0
-                -Duse_system_harfbuzz=0
-                -Duse_system_libjpeg=0
-                -Duse_system_libpng=0
-                -Duse_system_libxslt=0
-                -Duse_system_libxml=0
-                -Duse_system_libyuv=0
-                -Duse_system_nspr=0
-                -Duse_system_protobuf=0
-                -Duse_system_yasm=0"
-%endif
-
-%ifarch x86_64
-buildconfig+=" -Dsystem_libdir=lib64
-		-Dtarget_arch=x64"
-%endif
-
-buildconfig+=" -Duse_pulseaudio=1
-                -Dlinux_link_libpci=1
-                -Dlinux_link_gnome_keyring=1
-                -Dlinux_link_gsettings=1
-                -Dlinux_link_libgps=1
-                -Dlinux_link_libspeechd=1
-                -Djavascript_engine=v8
-                -Dlinux_use_gold_binary=0
-                -Dlinux_use_gold_flags=0
-                -Dgoogle_api_key=AIzaSyD1hTe85_a14kr1Ks8T3Ce75rvbR1_Dx7Q
-                -Dgoogle_default_client_id=4139804441.apps.googleusercontent.com
-                -Dgoogle_default_client_secret=KDTRKEZk2jwT_7CDpcmMA--P"
-
-%if 0%{?clang}
-export CC=/usr/bin/clang
-export CXX=/usr/bin/clang++
-# Modern Clang produces a *lot* of warnings 
-export CXXFLAGS="${CXXFLAGS} -Wno-unknown-warning-option -Wno-unused-local-typedef -Wunknown-attributes -Wno-tautological-undefined-compare"
-export GYP_DEFINES="clang=1"
-%endif
-
-%if 0%{?fedora}
-# Look, I don't know. This package is spit and chewing gum. Sorry.
-rm -rf third_party/jinja2 third_party/markupsafe
-ln -s %{python_sitelib}/jinja2 third_party/jinja2
-ln -s %{python_sitearch}/markupsafe third_party/markupsafe
-%endif
-
-build/linux/unbundle/replace_gyp_files.py $buildconfig
-
-export GYP_GENERATORS='ninja'
-./build/gyp_chromium build/all.gyp --depth=. $buildconfig
-
-mkdir -p out/Release
-
-ninja-build -C out/Release ffmpeg
+../depot_tools/ninja -C %{target} -vvv libffmpeg.so
 
 %install
 mkdir -p %{buildroot}%{_libdir}/%{opera_chan}/lib_extra
-install -m 644 %{_builddir}/chromium-%{version}/out/Release/lib/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib_extra/
+install -m 644 %{_builddir}/chromium-%{version}/out/Release/libffmpeg.so %{buildroot}%{_libdir}/%{opera_chan}/lib_extra/
 
 %files
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Wed Jan 04 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:56.0.2924.10-1
+- Rework *.spec file
+- Update to 56.0.2924.10
+- Match Opera version 44.0.2463.0
+
+* Tue Oct 25 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:55.0.2883.19-1
+- Update to 55.0.2883.19
+- Match Opera version 42.0.2392.0
+
+* Tue Sep 06 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:54.0.2832.2-1
+- Update to 54.0.2832.2
+- Match Opera version 41.0.2340.0
+
 * Mon Aug 22 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:54.0.2824.2-1
 - Update to 54.0.2824.2
 - Match Opera version 41.0.2329.0

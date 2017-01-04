@@ -1,4 +1,4 @@
-d861f6683e1c0698d4654bdc8077fa44  chromium-54.0.2824.2.clipped.tar.xz
-bf0af213eeb9f33c2b36ec0ab944f1ca  depot_tools.tar.xz
-ca6cdd31217945be60426bab8554e50b  gn-binaries.tar.xz
-683adc06998366259b6646cddc570503  check_chromium_version.sh
+24b0431f6b3e989ca1c73b5f6189d51b  chromium-56.0.2924.10.tar.xz
+6ab3f3be03cc5a97da188f4f186714ab  chromium-53.0.2785.92-last-commit-position.patch
+61dce1044e5ba252f2f30629d96a7e78  [deprecated]-get_sources.sh
+2ea59b9199b07dfbc8379383991668a4  check_chromium_version.sh
