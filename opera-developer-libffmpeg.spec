@@ -1,6 +1,3 @@
-# gn is the new new new buildtool. *sigh*
-%global use_gn 1
-
 # Leave this alone, please.
 %global target out/Release
 
@@ -15,7 +12,7 @@
 # Requires is trickier. 
 
 %global __provides_exclude_from %{chromium_path}/.*\\.so|%{chromium_path}/lib/.*\\.so
-%global privlibs libaccessibility|libaura_extra|libaura|libbase_i18n|libbase|libblink_common|libblink_core|libblink_modules|libblink_platform|libblink_web|libbluetooth|libboringssl|libbrowser_ui_views|libcaptive_portal|libcapture|libcc_blink|libcc_ipc|libcc_proto|libcc|libcc_surfaces|libchromium_sqlite3|libcloud_policy_proto_generated_compile|libcloud_policy_proto|libcommon|libcompositor|libcontent|libcrcrypto|libdbus|libdevice_battery|libdevice_core|libdevice_event_log|libdevice_gamepad|libdevice_geolocation|libdevices|libdevice_vibration|libdisplay_compositor|libdisplay|libdisplay_types|libdisplay_util|libdomain_reliability|libEGL|libevents_base|libevents_devices_x11|libevents_ipc|libevents_ozone_layout|libevents|libevents_x|libffmpeg|libfont_service_library|libgcm|libgeometry|libgesture_detection|libgfx_ipc_color|libgfx_ipc_geometry|libgfx_ipc_skia|libgfx_ipc|libgfx|libgfx_x11|libgin|libgles2_c_lib|libgles2_implementation|libgles2_utils|libGLESv2|libgl_init|libgl_wrapper|libgpu|libgtk2ui|libicui18n|libicuuc|libipc|libkeyboard|libkeyboard_with_content|libkeycodes_x11|libkeyed_service_content|libkeyed_service_core|libmedia_blink|libmedia_gpu|libmedia|libmemory_coordinator_browser|libmemory_coordinator_child|libmemory_coordinator_common|libmessage_center|libmidi|libmojo_blink_lib|libmojo_common_lib|libmojo_ime_lib|libmojo_public_system|libmojo_system_impl|libnative_theme|libnet|libnet_with_v8|libonc|libplatform|libpolicy_component|libpolicy_proto|libpower_save_blocker|libppapi_host|libppapi_proxy|libppapi_shared|libprefs|libprinting|libprotobuf_lite|libproxy_config|librange|libsandbox_services|libseccomp_bpf|libsessions|libshared_memory_support|libshell_dialogs|libskia|libsnapshot|libsql|libstartup_tracing|libstorage_browser|libstorage_common|libstub_window|libsuid_sandbox_client|libsurface|libtracing|libtranslator|libui_base_ime|libui_base|libui_base_x|libui_data_pack|libui_library|libui_touch_selection|libui_views_mus_lib|liburl_ipc|liburl_matcher|liburl|libuser_prefs|libv8|libviews|libwebdata_common|libweb_dialogs|libwebview|libwidevinecdm|libwm|libwtf|libx11_events_platform|libx11_window|libbindings|libgeolocation|libmojo_public_system_cpp|libtime_zone_monitor
+%global privlibs libaccessibility|libaura_extra|libaura|libbase_i18n|libbase|libblink_common|libblink_core|libblink_modules|libblink_platform|libblink_web|libbluetooth|libboringssl|libbrowser_ui_views|libcaptive_portal|libcapture|libcc_blink|libcc_ipc|libcc_proto|libcc|libcc_surfaces|libchromium_sqlite3|libcloud_policy_proto_generated_compile|libcloud_policy_proto|libcommon|libcompositor|libcontent|libcrcrypto|libdbus|libdevice_battery|libdevice_core|libdevice_event_log|libdevice_gamepad|libdevice_geolocation|libdevices|libdevice_vibration|libdisplay_compositor|libdisplay|libdisplay_types|libdisplay_util|libdomain_reliability|libEGL|libevents_base|libevents_devices_x11|libevents_ipc|libevents_ozone_layout|libevents|libevents_x|libffmpeg|libfont_service_library|libgcm|libgeometry|libgesture_detection|libgfx_ipc_color|libgfx_ipc_geometry|libgfx_ipc_skia|libgfx_ipc|libgfx|libgfx_x11|libgin|libgles2_c_lib|libgles2_implementation|libgles2_utils|libGLESv2|libgl_init|libgl_wrapper|libgpu|libgtk2ui|libicui18n|libicuuc|libipc|libkeyboard|libkeyboard_with_content|libkeycodes_x11|libkeyed_service_content|libkeyed_service_core|libmedia_blink|libmedia_gpu|libmedia|libmemory_coordinator_browser|libmemory_coordinator_child|libmemory_coordinator_common|libmessage_center|libmidi|libmojo_blink_lib|libmojo_common_lib|libmojo_ime_lib|libmojo_public_system|libmojo_system_impl|libnative_theme|libnet|libnet_with_v8|libonc|libplatform|libpolicy_component|libpolicy_proto|libpower_save_blocker|libppapi_host|libppapi_proxy|libppapi_shared|libprefs|libprinting|libprotobuf_lite|libproxy_config|librange|libsandbox_services|libseccomp_bpf|libsessions|libshared_memory_support|libshell_dialogs|libskia|libsnapshot|libsql|libstartup_tracing|libstorage_browser|libstorage_common|libstub_window|libsuid_sandbox_client|libsurface|libtracing|libtranslator|libui_base_ime|libui_base|libui_base_x|libui_data_pack|libui_library|libui_touch_selection|libui_views_mus_lib|liburl_ipc|liburl_matcher|liburl|libuser_prefs|libv8|libviews|libwebdata_common|libweb_dialogs|libwebview|libwidevinecdm|libwm|libwtf|libx11_events_platform|libx11_window|libbindings|libgeolocation|libmojo_public_system_cpp|libtime_zone_monitor|libdevice_base|libcc_animation|libcpp|libdevice_base|libdiscardable_memory_client|libdiscardable_memory_common|libdiscardable_memory_service|libgeneric_sensor|libgl_in_process_context|libjs|libpower_monitor|libv8_libbase|libsensors|libdevice_vr|libcc_paint|libgtk3ui
 %global __requires_exclude ^(%{privlibs})\\.so
 
 #%if 0
@@ -53,10 +50,10 @@
 %global build_for_x86_64 1
 %global build_for_i386 1
 %define opera_chan opera-developer
-%define opera_ver 44.0.2463.0
+%define opera_ver 45.0.2522.0
 
 Name:		%{opera_chan}-libffmpeg
-Version:	56.0.2924.10
+Version:	58.0.3013.3
 %if 0%{?fedora} >= 25
 Release:	1%{?dist}.R
 %else
@@ -74,6 +71,7 @@ Source1:	depot_tools.git-master.tar.gz
 ### Chromium Fedora Patches ###
 # https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/7nlJv486bD4
 Patch0:	chromium-53.0.2785.92-last-commit-position.patch
+Patch1:	chromium-57.0.2987.98-gcc48-compat-version-stdatomic.patch
 
 # We can assume gcc and binutils.
 BuildRequires:	gcc-c++
@@ -198,6 +196,7 @@ H264 and MP4 support. Opera-libffmpeg package includes this library.
 
 ### Chromium Fedora Patches ###
 %patch0 -p1 -b .lastcommit
+%patch1 -p1 -b .gcc48-compat-version-stdatomic
 
 export CC="gcc"
 export CXX="g++"
@@ -210,100 +209,12 @@ CHROMIUM_BROWSER_GN_DEFINES+=' is_debug=false'
 CHROMIUM_BROWSER_GN_DEFINES+=' system_libdir="lib64"'
 %endif
 CHROMIUM_BROWSER_GN_DEFINES+=' google_api_key="%{api_key}" google_default_client_id="%{default_client_id}" google_default_client_secret="%{default_client_secret}"'
-CHROMIUM_BROWSER_GN_DEFINES+=' is_clang=false use_sysroot=false use_gio=true use_pulseaudio=true'
+CHROMIUM_BROWSER_GN_DEFINES+=' is_clang=false use_sysroot=false use_gio=true use_pulseaudio=true icu_use_data_file=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' ffmpeg_branding="ChromeOS" proprietary_codecs=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' is_component_ffmpeg=true is_component_build=true'
 CHROMIUM_BROWSER_GN_DEFINES+=' use_gold=false'
 CHROMIUM_BROWSER_GN_DEFINES+=' treat_warnings_as_errors=false'
 export CHROMIUM_BROWSER_GN_DEFINES
-
-export CHROMIUM_BROWSER_GYP_DEFINES="\
-%ifarch x86_64
-	-Dtarget_arch=x64 \
-	-Dsystem_libdir=lib64 \
-%endif
-	-Dgoogle_api_key="%{api_key}" \
-	-Dgoogle_default_client_id="%{default_client_id}" \
-	-Dgoogle_default_client_secret="%{default_client_secret}" \
-	-Ddisable_glibc=1 \
-	-Dlinux_fpic=1 \
-	-Ddisable_sse2=1 \
-	-Duse_pulseaudio=1 \
-	-Duse_system_flac=1 \
-%if 0%{?bundleharfbuzz}
-	-Duse_system_harfbuzz=0 \
-%else
-	-Duse_system_harfbuzz=1 \
-%endif
-#	-Duse_system_libevent=0 \
-#	-Duse_system_libjpeg=1 \
-#	-Duse_system_libpng=1 \
-#	-Duse_system_libxml=0 \
-#	-Duse_system_libxslt=1 \
-%if %{bundleopus}
-	-Duse_system_opus=0 \
-%else
-	-Duse_system_opus=1 \
-%endif
-	-Duse_system_protobuf=0 \
-%if 0%{?bundlere2}
-%else
-	-Duse_system_re2=1 \
-%endif
-	-Duse_system_libsrtp=0 \
-#	-Duse_system_xdg_utils=1 \
-	-Duse_system_yasm=1 \
-	-Duse_system_zlib=0 \
-	\
-#	-Dlinux_link_libspeechd=1 \
-#	-Dlinux_link_gnome_keyring=1 \
-#	-Dlinux_link_gsettings=1 \
-#	-Dlinux_link_libpci=1 \
-#	-Dlinux_link_libgps=0 \
-	-Dlinux_sandbox_path=%{chromium_path}/chrome-sandbox \
-	-Dlinux_sandbox_chrome_path=%{chromium_path}/chromium-browser \
-	-Dlinux_strip_binary=1 \
-	-Dlinux_use_bundled_binutils=0 \
-	-Dlinux_use_bundled_gold=0 \
-	-Dlinux_use_gold_binary=0 \
-	-Dlinux_use_gold_flags=0 \
-#	-Dlinux_use_libgps=0 \
-#	\
-#	-Dusb_ids_path=/usr/share/hwdata/usb.ids \
-#%if 0%{?fedora}
-#	-Dlibspeechd_h_prefix=speech-dispatcher/ \
-#%endif
-#	\
-    -Dffmpeg_branding=ChromeOS \
-    -Dproprietary_codecs=1 \
-	-Dbuild_ffmpegsumo=1 \
-	-Dffmpeg_component=shared_library \
-#	\
-#	-Dno_strict_aliasing=1 \
-#	-Dv8_no_strict_aliasing=1 \
-#	\
-	-Dremove_webcore_debug_symbols=1 \
-#	-Dlogging_like_official_build=1 \
-#	-Denable_hotwording=0 \
-#	-Duse_aura=1 \
-#	-Denable_hidpi=1 \
-#	-Denable_touch_ui=1 \
-#	-Denable_pepper_cdms=1 \
-#	-Denable_webrtc=1 \
-#	-Denable_widevine=1 \
-%if 0%{gtk3}
-	-Duse_gtk3=1 \
-%else
-	-Dtoolkit_uses_gtk=0 \
-%endif
-%if 0
-	-Dbuildtype=Official \
-%endif
-	\
-	-Dcomponent=shared_library \
-	-Duse_sysroot=0 \
-	-Drelease_extra_cflags="-fno-delete-null-pointer-checks" \
-	-Dwerror= -Dsysroot="
 
 # Remove most of the bundled libraries. Libraries specified below (taken from
 # Gentoo's Chromium ebuild) are the libraries that needs to be preserved.
@@ -313,6 +224,9 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/flac' \
 	'third_party/harfbuzz-ng' \
 	'third_party/icu' \
+	'third_party/inspector_protocol' \
+	'v8/third_party/inspector_protocol' \
+	'third_party/cld_3' \
 	'base/third_party/libevent' \
 	'third_party/libjpeg_turbo' \
 	'third_party/libpng' \
@@ -321,13 +235,10 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libxml' \
 	'third_party/libxslt' \
 	'third_party/openh264' \
-%if 0%{?bundlere2}
 	'third_party/re2' \
-%endif
 	'third_party/snappy' \
 	'third_party/speech-dispatcher' \
 	'third_party/usb_ids' \
-	'third_party/woff2' \
 	'third_party/xdg-utils' \
 	'third_party/yasm' \
 	'third_party/zlib' \
@@ -383,6 +294,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/google_input_tools/third_party/closure_library/third_party/closure' \
 	'third_party/hunspell' \
 	'third_party/iccjpeg' \
+	'third_party/jinja2' \
 	'third_party/jstemplate' \
 	'third_party/khronos' \
 	'third_party/leveldatabase' \
@@ -391,7 +303,9 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/libjingle' \
 	'third_party/libphonenumber' \
 	'third_party/libsecret' \
+	'third_party/libsrtp' \
 	'third_party/libudev' \
+	'third_party/libusb' \
 	'third_party/libvpx' \
 	'third_party/libvpx/source/libvpx/third_party/x86inc' \
 	'third_party/libxml/chromium' \
@@ -413,6 +327,8 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/pdfium/third_party/lcms2-2.6' \
 	'third_party/pdfium/third_party/libjpeg' \
 	'third_party/pdfium/third_party/libopenjpeg20' \
+	'third_party/pdfium/third_party/libpng16' \
+	'third_party/pdfium/third_party/libtiff' \
 	'third_party/pdfium/third_party/zlib_v128' \
 	'third_party/polymer' \
 	'third_party/protobuf' \
@@ -431,6 +347,7 @@ build/linux/unbundle/remove_bundled_libraries.py \
 	'third_party/webdriver' \
 	'third_party/webrtc' \
 	'third_party/widevine' \
+	'third_party/woff2' \
 	'third_party/x86inc' \
 	'third_party/zlib/google' \
 	'url/third_party/mozilla' \
@@ -446,7 +363,6 @@ ln -s %{python_sitearch}/markupsafe third_party/markupsafe
 
 export PATH=$PATH:%{_builddir}/depot_tools
 
-%if %{use_gn}
 build/linux/unbundle/replace_gn_files.py --system-libraries \
 	flac \
 %if 0%{?bundleharfbuzz}
@@ -465,14 +381,9 @@ build/linux/unbundle/replace_gn_files.py --system-libraries \
 
 tools/gn/bootstrap/bootstrap.py -v --gn-gen-args "$CHROMIUM_BROWSER_GN_DEFINES"
 %{target}/gn gen --args="$CHROMIUM_BROWSER_GN_DEFINES" %{target}
-%else
-# Update gyp files according to our configuration
-# If you will change something in the configuration please update it
-# for build/gyp_chromium as well (and vice versa).
-build/linux/unbundle/replace_gyp_files.py $CHROMIUM_BROWSER_GYP_DEFINES
 
-build/gyp_chromium --depth . $CHROMIUM_BROWSER_GYP_DEFINES
-%endif
+# hackity hack hack
+rm -rf third_party/libusb/src/libusb/libusb.h
 
 %build
 
@@ -486,6 +397,15 @@ install -m 644 %{_builddir}/chromium-%{version}/out/Release/libffmpeg.so %{build
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Sun Mar 12 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:58.0.3013.3-1
+- Update to 58.0.3013.3
+- Add gcc48-compat-version-stdatomic patch
+- Match Opera version 45.0.2522.0
+
+* Tue Jan 17 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:57.0.2950.49-1
+- Update to 57.0.2950.4
+- Match Opera version 44.0.2475.0
+
 * Wed Jan 04 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:56.0.2924.10-1
 - Rework *.spec file
 - Update to 56.0.2924.10
