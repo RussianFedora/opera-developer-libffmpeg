@@ -1,5 +1,6 @@
 34843a57e861a8436d784f066d127e51  chromium-58.0.3013.3.tar.xz
 6ab3f3be03cc5a97da188f4f186714ab  chromium-53.0.2785.92-last-commit-position.patch
 48e4fad3da7ab3e2aa85670015ee3572  chromium-57.0.2987.98-gcc48-compat-version-stdatomic.patch
+6548c4b9dceecd8a65c31c314d6b6ffa  chromium-gn-bootstrap-r1.patch
 61dce1044e5ba252f2f30629d96a7e78  [deprecated]-get_sources.sh
 2ea59b9199b07dfbc8379383991668a4  check_chromium_version.sh
