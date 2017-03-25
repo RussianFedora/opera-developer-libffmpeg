@@ -55,9 +55,9 @@
 Name:		%{opera_chan}-libffmpeg
 Version:	58.0.3029.6
 %if 0%{?fedora} >= 25
-Release:	2%{?dist}.R
+Release:	3%{?dist}.R
 %else
-Release:	2%{?dist}
+Release:	3%{?dist}
 %endif
 Epoch:		5
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
@@ -72,7 +72,7 @@ Source1:	depot_tools.git-master.tar.gz
 # https://groups.google.com/a/chromium.org/forum/#!topic/gn-dev/7nlJv486bD4
 Patch0:	chromium-53.0.2785.92-last-commit-position.patch
 Patch1:	chromium-57.0.2987.98-gcc48-compat-version-stdatomic.patch
-#Patch2:	chromium-gn-bootstrap-r1.patch
+Patch2:	chromium-gn-bootstrap-r2.patch
 
 # We can assume gcc and binutils.
 BuildRequires:	gcc-c++
@@ -198,7 +198,7 @@ H264 and MP4 support. Opera-libffmpeg package includes this library.
 ### Chromium Fedora Patches ###
 %patch0 -p1 -b .lastcommit
 %patch1 -p1 -b .gcc48-compat-version-stdatomic
-#%patch2 -p1 -b .gn
+%patch2 -p1 -b .gn
 
 export CC="gcc"
 export CXX="g++"
@@ -399,6 +399,9 @@ install -m 644 %{_builddir}/chromium-%{version}/out/Release/libffmpeg.so %{build
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Sat Mar 25 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:58.0.3029.6-3
+- Add chromium-gn-bootstrap-r2.patch
+
 * Tue Mar 21 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:58.0.3029.6-2
 - Drop chromium-gn-bootstrap-r1.patch
 
