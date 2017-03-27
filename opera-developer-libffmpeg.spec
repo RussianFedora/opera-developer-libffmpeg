@@ -50,14 +50,14 @@
 %global build_for_x86_64 1
 %global build_for_i386 1
 %define opera_chan opera-developer
-%define opera_ver 45.0.2539.0
+%define opera_ver 45.0.2545.0
 
 Name:		%{opera_chan}-libffmpeg
-Version:	58.0.3029.6
+Version:	58.0.3029.19
 %if 0%{?fedora} >= 25
-Release:	3%{?dist}.R
+Release:	1%{?dist}.R
 %else
-Release:	3%{?dist}
+Release:	1%{?dist}
 %endif
 Epoch:		5
 Summary:	Additional FFmpeg library for Opera Web browser providing H264 and MP4 support
@@ -399,6 +399,10 @@ install -m 644 %{_builddir}/chromium-%{version}/out/Release/libffmpeg.so %{build
 %{_libdir}/%{opera_chan}/lib_extra/libffmpeg.so
 
 %changelog
+* Mon Mar 27 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:58.0.3029.19-1
+- Update to 58.0.3029.19
+- Match Opera version 45.0.2545.0
+
 * Sat Mar 25 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 5:58.0.3029.6-3
 - Add chromium-gn-bootstrap-r2.patch
 
